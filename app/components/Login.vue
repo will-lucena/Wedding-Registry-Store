@@ -1,7 +1,5 @@
 <template>
-  <Page>
-    <ActionBar/>
-    <StackLayout orientation="vertical">
+  <StackLayout orientation="vertical">
       <TextField v-model="user.name" hint="name"/>
       <TextField v-model="user.email" hint="email" keyboardType="email"/>
       <TextField v-model="user.username" hint="username"/>
@@ -9,27 +7,32 @@
       <TextField v-model="confirmation" hint="confirm your password" secure="true"/>
       <Button text="Sign up" @tap="signup(user.email, user.password, confirmation)"/>
     </StackLayout>
-  </Page>
 </template>
 
 <script>
-import App from './App'
-
 export default {
   data() {
     return {
       user: {
-        name: "",
-        email: "",
-        username: "",
-        password: "",
-        credits: 1000
+        name: null,
+        email: null,
+        username: null,
+        password: null,
+        credits: 500
       },
-      confirmation: ""
+      confirmation: null
     };
   },
   methods: {
     signup(email, password, confirmation) {
+      this.$emit("signup", this.user);
+      this.user.name = null;
+      this.user.email = null;
+      this.user.username = null;
+      this.user.password = null;
+      this.confirmation = null;
+
+      /*
       // Transformar numa constante em utils
       let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       let passwordRegex = /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/;
@@ -40,7 +43,12 @@ export default {
         {
           if (String(password) == String(confirmation))
           {
-            this.$navigateTo(App) 
+            this.$emit('signup', this.user)
+            name = null
+            email = null
+            username = null
+            password = null
+            confirmation = null
           }
           else
           {
@@ -56,21 +64,12 @@ export default {
       {
         console.log("email errado")
       }
+      /**/
     }
   }
 };
 </script>
 
 <style scoped>
-ActionBar {
-  background-color: #53ba82;
-  color: #ffffff;
-}
 
-.message {
-  vertical-align: center;
-  text-align: center;
-  font-size: 20;
-  color: #333333;
-}
 </style>
