@@ -2,8 +2,8 @@
   <FlexboxLayout class="page">
     <ScrollView orientation="vertical">
       <StackLayout class="form">
-        <Image class="logo" src="~/assets/images/NativeScript-Vue.png"/>
-        <Label class="header" text="Wedding Registry Store"/>
+        <Image class="logo m-b-12" height="80" src="~/assets/images/NativeScript-Vue.png"/>
+        <Label class="header h1 text-center font-weight-bold m-x-auto text-primary" text="Wedding Registry Store"/>
 
         <StackLayout class="input-field">
           <TextField v-model="user.name" hint="name" class="input"></TextField>
@@ -88,6 +88,7 @@ export default {
 </script>
 
 <style scoped>
+/*
 .page {
   align-items: center;
   flex-direction: column;
@@ -121,12 +122,7 @@ export default {
 
 .input {
   font-size: 18;
-  placeholder-color: #a8a8a8;
-}
-
-.input:disabled {
-  background-color: white;
-  opacity: 0.5;
+  color: #a8a8a8;
 }
 
 .btn-primary {
@@ -146,4 +142,5 @@ export default {
 .bold {
   color: #000000;
 }
+/**/
 </style>

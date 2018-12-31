@@ -1,7 +1,12 @@
 <template>
-  <FlexboxLayout>
-    <Label text:hi/>
-  </FlexboxLayout>
+  <StackLayout orientation="vertical">
+    <Label :text="cartSize" class="cart"/>
+    <ListView :items="products">
+      <v-template>
+        <Product :product="item" @addToCart="addToCart"></Product>
+      </v-template>
+    </ListView>
+  </StackLayout>
 </template>
 
 <script>
@@ -19,24 +24,46 @@ export default {
   },
   data() {
     return {
-      cart: []
-    };
+      cart: [],
+      products: [
+        {
+          name: "p1",
+          image: "~/assets/images/NativeScript-Vue.png",
+          description: "item desc",
+          price: 50,
+          currentAmount: 5
+        },
+        {
+          name: "p2",
+          image: "~/assets/images/NativeScript-Vue.png",
+          description: "item2 desc",
+          price: 500,
+          currentAmount: 2
+        }
+      ]
+    }
   },
-  methods: {},
+  methods: {
+    addToCart(item) {
+      this.cart.push(item);
+      this.$emit("updateCart", item)
+    }
+  },
   computed: {
-    haveMoneyEnought(price) {
-      return this.user.credits > price;
-    },
-    hi() {
-      if (this.user) {
-        return "Hi " + this.user.name;
-      } else {
-        return "Fudeu";
-      }
+    cartSize() {
+      return "Cart(" + this.cart.length + ")";
     }
   }
 };
 </script>
 
 <style scope>
+/*
+ .cart {
+    margin-right: 25px;
+    float: right;
+    border: 1px solid #d8d8d8;
+    padding: 5px 20px;
+}
+/**/
 </style>
