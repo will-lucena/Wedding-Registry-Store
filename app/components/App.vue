@@ -4,13 +4,9 @@
       <ActionItem @tap="goToCart" v-show="onStoreScreen" text="Cart" class="action-item"/>
     </ActionBar>
     <FlexboxLayout class="page">
-      <Store :user="user" v-if="onStoreScreen" @updateCart="updateCart"></Store>
-      <Login :user="user" @signup="signup" v-if="onLoginScreen"></Login>
-      <ListView class="list-group" :items="cart" v-if="onCartScreen">
-        <v-template>
-          <Product :product="item"></Product>
-        </v-template>
-      </ListView>
+      <Store :user="user" v-if="onStoreScreen"></Store>
+      <Login :user="user" v-if="onLoginScreen" @signup="signup"></Login>
+      <Cart :user="user" v-if="onCartScreen"></Cart>
     </FlexboxLayout>
   </Page>
 </template>
@@ -18,7 +14,8 @@
 <script>
 import Login from "./Login.vue";
 import Store from "./Store.vue";
-import Product from "./Product.vue"
+import Product from "./Product.vue";
+import Cart from "./Cart.vue";
 
 export default {
   data() {
@@ -30,14 +27,14 @@ export default {
         credits: null
       },
       isLoggedin: false,
-      finishShop: false,
-      cart: []
+      finishShop: false
     };
   },
   components: {
     Login,
     Store,
-    Product
+    Product,
+    Cart
   },
   methods: {
     signup(user) {
@@ -48,11 +45,7 @@ export default {
       this.isLoggedin = true;
     },
     goToCart() {
-      console.log("cart");
       this.finishShop = true;
-    },
-    updateCart(item) {
-      this.cart.push(item);
     }
   },
   computed: {

@@ -3,7 +3,7 @@
     <Label :text="cartSize" class="cart"/>
     <ListView :items="products">
       <v-template>
-        <Product :product="item" @addToCart="addToCart"></Product>
+        <Product :user="user" :product="item"></Product>
       </v-template>
     </ListView>
   </StackLayout>
@@ -24,34 +24,38 @@ export default {
   },
   data() {
     return {
-      cart: [],
       products: [
         {
+          id: 0,
           name: "p1",
           image: "~/assets/images/NativeScript-Vue.png",
           description: "item desc",
           price: 50,
-          currentAmount: 5
+          availableAmount: 5
         },
         {
+          id: 1,
           name: "p2",
           image: "~/assets/images/NativeScript-Vue.png",
           description: "item2 desc",
           price: 500,
-          currentAmount: 2
+          availableAmount: 2
+        },
+        {
+          id: 2,
+          name: "p3",
+          image: "~/assets/images/NativeScript-Vue.png",
+          description: "item3 desc",
+          price: 2000,
+          availableAmount: 1
         }
       ]
-    }
+    };
   },
-  methods: {
-    addToCart(item) {
-      this.cart.push(item);
-      this.$emit("updateCart", item)
-    }
-  },
+  methods: {},
   computed: {
     cartSize() {
-      return "Cart(" + this.cart.length + ")";
+      return "Cart (" + this.$store.state.products.length + ")";
     }
   }
 };

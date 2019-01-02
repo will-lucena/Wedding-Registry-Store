@@ -3,7 +3,10 @@
     <ScrollView orientation="vertical">
       <StackLayout class="form">
         <Image class="logo m-b-12" height="80" src="~/assets/images/NativeScript-Vue.png"/>
-        <Label class="header h1 text-center font-weight-bold m-x-auto text-primary" text="Wedding Registry Store"/>
+        <Label
+          class="header h1 text-center font-weight-bold m-x-auto text-primary"
+          text="Wedding Registry Store"
+        />
 
         <StackLayout class="input-field">
           <TextField v-model="user.name" hint="name" class="input"></TextField>
