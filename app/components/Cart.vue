@@ -1,26 +1,27 @@
 <template>
-  <StackLayout orientation="vertical">
-    <Label :text="userCredits"/>
-    <ListView :items="cart">
-      <v-template>
-        <StackLayout orientation="horizontal" class="product m-b-10">
-          <Image :src="item.image" width="150" class="product-image m-b-10 m-r-10"/>
-          <StackLayout orientation="vertical" class="product-info">
-            <Label :text="item.name"/>
-            <Label :text="item.description"/>
-            <Label :text="item.price"/>
-            <Label :text="productAmount(item)"/>
+  <Page class="page">
+    <StackLayout orientation="vertical">
+      <Button text="Checkout" class="checkout-button" @tap="checkout"/>
+      <ListView :items="cart">
+        <v-template>
+          <StackLayout orientation="vertical">
+            <StackLayout orientation="horizontal" class="item m-b-10">
+              <Image :src="item.image" class="item-image m-b-10 m-r-10"/>
+              <StackLayout orientation="vertical" class="item-info">
+                <Label :text="item.name" textWrap="true"/>
+                <Label :text="productTotalCost(item)" textWrap="true"/>
+              </StackLayout>
+            </StackLayout>
+            <Button text="Remove" class="remove-button" @tap="remove(item)"/>
           </StackLayout>
-        </StackLayout>
-      </v-template>
-    </ListView>
-    <Button text="Checkout" @tap="checkout"/>
-  </StackLayout>
+        </v-template>
+      </ListView>
+    </StackLayout>
+  </Page>
 </template>
 
 <script>
 import Product from "./Product.vue";
-import { mapGetters } from "vuex";
 
 export default {
   props: {
@@ -38,30 +39,39 @@ export default {
   methods: {
     checkout() {
       this.user.credits -= this.total;
-      console.log(this.user.credits)
+      this.$store.state.products = [];
+      let result = { user: this.user, finalCart: this.cart };
+      this.$modal.close(result);
     },
     productAmount(product) {
       return this.$store.state.products.filter(item => item.id == product.id)
         .length;
+    },
+    productTotalCost(product) {
+      var quantity = this.productAmount(product);
+      return product.price + "x" + quantity + " = " + product.price * quantity;
+    },
+    remove(product) {
+      this.cart = this.cart.filter(item => item.id != product.id);
+
+      this.total = 0;
+
+      this.cart.forEach(item => {
+        this.total += item.price * this.productAmount(item);
+      });
     }
   },
   computed: {
     userCredits() {
       return "Credits: " + this.user.credits;
-    },
-    getProducts() {
-      return this.$store.state.products;
     }
   },
-  mounted()
-  {
-    for(var i = 0; i < this.$store.state.productsInStore; i++)
-    {
-      let list = this.$store.state.products.filter(item => item.id == i)
-      if (list.length > 0)
-      {
-        this.cart.push(list[0])
-        this.total += (list[0].price * list.length)
+  mounted() {
+    for (var i = 0; i < this.$store.state.productsInStore; i++) {
+      let list = this.$store.state.products.filter(item => item.id == i);
+      if (list.length > 0) {
+        this.cart.push(list[0]);
+        this.total += list[0].price * list.length;
       }
     }
   }
@@ -69,12 +79,31 @@ export default {
 </script>
 
 <style scope>
-/*
- .cart {
-    margin-right: 25px;
-    float: right;
-    border: 1px solid #d8d8d8;
-    padding: 5px 20px;
+.item {
+  display: flex;
+  flex-flow: wrap;
+  padding: 4px;
 }
-/**/
+
+.item-image {
+  width: 100%;
+  height: 200px;
+}
+
+.item-image,
+.item-info {
+  margin-top: 10px;
+  width: 50%;
+  color: #212121;
+}
+
+.checkout-button {
+  background-color: #9ccc65;
+  color: #212121;
+}
+
+.remove-button {
+  background-color: #ef5350;
+  color: #212121;
+}
 </style>

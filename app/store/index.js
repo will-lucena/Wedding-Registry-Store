@@ -5,13 +5,13 @@ Vue.use(Vuex)
 
 const state = {
   products: [],
-  productsInStore: 3
+  productsInStore: 5,
 };
 
 const mutations = {
   addToCart(state, product) {
     state.products.push(product)
-  }
+  },
 }
 
 const store = new Vuex.Store({

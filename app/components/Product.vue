@@ -1,12 +1,11 @@
 <template>
   <StackLayout orientation="horizontal" class="product m-b-10">
-    <Image :src="product.image" width="150" class="product-image m-b-10 m-r-10"/>
+    <Image :src="product.image" class="product-image m-b-10 m-r-10"/>
     <StackLayout orientation="vertical" class="product-info">
-      <Label :text="product.name"/>
-      <Label :text="product.description"/>
-      <Label :text="product.price"/>
-      <Label :text="product.availableAmount"/>
-      <Button v-if="isAvailable" text="Add to cart" @tap="addToCart"/>
+      <Label :text="product.name" textWrap="true"/>
+      <Label :text="price" textWrap="true"/>
+      <Label :text="quantityAvailable" textWrap="true"/>
+      <Button v-if="isAvailable" text="Add to cart" class="button m-12" @tap="addToCart"/>
     </StackLayout>
   </StackLayout>
 </template>
@@ -31,14 +30,13 @@ export default {
   methods: {
     addToCart() {
       this.$store.commit("addToCart", this.product);
-      this.product.availableAmount--
-      console.log(this.product.availableAmount > 0);
+      this.product.temporaryAmount--;
     }
   },
   computed: {
     isAvailable() {
       return (
-        this.product.availableAmount > 0 &&
+        this.product.temporaryAmount > 0 &&
         this.user.credits >= this.product.price + this.currentCartPrice
       );
     },
@@ -48,28 +46,38 @@ export default {
         price += element.price;
       });
       return price;
+    },
+    price() {
+      return "Price: " + this.product.price;
+    },
+    quantityAvailable() {
+      return "Quantity available: " + this.product.temporaryAmount;
     }
   }
 };
 </script>
 
 <style scope>
-/*
 .product {
   display: flex;
   flex-flow: wrap;
-  padding: 1rem;
-  margin-bottom: 10px;
+  padding: 4px;
 }
 
 .product-image {
-  width: 80%;
+  width: 100%;
+  height: 200px;
 }
 
 .product-image,
 .product-info {
   margin-top: 10px;
   width: 50%;
+  color: #fafafa;
 }
-/**/
+
+.button {
+  background-color: #616161;
+  color: #fafafa;
+}
 </style>

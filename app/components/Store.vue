@@ -1,16 +1,22 @@
 <template>
-  <StackLayout orientation="vertical">
-    <Label :text="cartSize" class="cart"/>
-    <ListView :items="products">
-      <v-template>
-        <Product :user="user" :product="item"></Product>
-      </v-template>
-    </ListView>
-  </StackLayout>
+  <Page class="page">
+    <ActionBar :title="title"></ActionBar>
+    <FlexboxLayout>
+      <StackLayout orientation="vertical">
+        <Button :text="cartSize" @tap="goToCart" class="checkout-button m-12"/>
+        <ListView :items="products">
+          <v-template>
+            <Product :user="user" :product="item"></Product>
+          </v-template>
+        </ListView>
+      </StackLayout>
+    </FlexboxLayout>
+  </Page>
 </template>
 
 <script>
 import Product from "./Product.vue";
+import Cart from "./Cart.vue";
 
 export default {
   props: {
@@ -27,47 +33,103 @@ export default {
       products: [
         {
           id: 0,
-          name: "p1",
-          image: "~/assets/images/NativeScript-Vue.png",
-          description: "item desc",
-          price: 50,
-          availableAmount: 5
+          name: "Bottle labels Jack Daniel",
+          image: "~/assets/images/Bottle-labels-jackdaniels.jpg",
+          price: 14,
+          availableAmount: 5,
+          temporaryAmount: 5
         },
         {
           id: 1,
-          name: "p2",
-          image: "~/assets/images/NativeScript-Vue.png",
-          description: "item2 desc",
-          price: 500,
-          availableAmount: 2
+          name: "Punisher silver cunfflinks",
+          image: "~/assets/images/Punisher-silver-cufflinks.gif",
+          price: 150,
+          availableAmount: 10,
+          temporaryAmount: 10
         },
         {
           id: 2,
-          name: "p3",
-          image: "~/assets/images/NativeScript-Vue.png",
-          description: "item3 desc",
-          price: 2000,
-          availableAmount: 1
+          name: "Star wars silver cunfflinks 2",
+          image: "~/assets/images/Star-wars-silver-cufflinks.jpg",
+          price: 150,
+          availableAmount: 10,
+          temporaryAmount: 10
+        },
+        {
+          id: 3,
+          name: "Wedding tissues",
+          image: "~/assets/images/Tissues.jpg",
+          price: 30,
+          availableAmount: 7,
+          temporaryAmount: 7
+        },
+        {
+          id: 4,
+          name: "Mr and ms mug sets",
+          image: "~/assets/images/Mr-and-ms-mug-sets.jpg",
+          price: 120,
+          availableAmount: 2,
+          temporaryAmount: 2
+        },
+        {
+          id: 5,
+          name: "Silhouette cake topper bowing groom",
+          image: "~/assets/images/Silhouette-cake-topper-bowing-groom.jpg",
+          price: 65,
+          availableAmount: 1,
+          temporaryAmount: 1
         }
       ]
     };
   },
-  methods: {},
+  methods: {
+    goToCart() {
+      this.$showModal(Cart, { props: { user: this.user } }).then(data => {
+        this.user = data.user;
+
+        for (var i = 0; i < this.products.length; i++) {
+          if (
+            typeof data.finalCart.find(
+              item => this.products[i].id == item.id
+            ) === "undefined"
+          ) {
+            this.products[i].temporaryAmount = this.products[i].availableAmount;
+          } else {
+            this.products[i].availableAmount = this.products[i].temporaryAmount;
+          }
+        }
+      });
+    }
+  },
   computed: {
     cartSize() {
       return "Cart (" + this.$store.state.products.length + ")";
+    },
+    title() {
+      return (
+        "Welcome " +
+        this.user.name +
+        " you have " +
+        this.user.credits +
+        " credits"
+      );
     }
   }
 };
 </script>
 
 <style scope>
-/*
- .cart {
-    margin-right: 25px;
-    float: right;
-    border: 1px solid #d8d8d8;
-    padding: 5px 20px;
+ActionBar {
+  background-color: #212121;
+  color: #fafafa;
 }
-/**/
+
+.action-item {
+  color: #fafafa;
+}
+
+.checkout-button {
+  background-color: #9ccc65;
+  color: #212121;
+}
 </style>
