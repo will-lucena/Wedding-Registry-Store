@@ -1,7 +1,7 @@
 <template>
   <Page class="page">
     <StackLayout orientation="vertical">
-      <Button text="Checkout" class="checkout-button" @tap="checkout"/>
+      <Button text="Buy" class="checkout-button" @tap="checkout"/>
       <ListView :items="cart">
         <v-template>
           <StackLayout orientation="vertical">
