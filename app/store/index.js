@@ -5,7 +5,6 @@ Vue.use(Vuex)
 
 const state = {
   products: [],
-  productsInStore: 5,
 };
 
 const mutations = {

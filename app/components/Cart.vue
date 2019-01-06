@@ -22,6 +22,7 @@
 
 <script>
 import Product from "./Product.vue";
+import { Items } from "~/assets/data.js";
 
 export default {
   props: {
@@ -67,7 +68,7 @@ export default {
     }
   },
   mounted() {
-    for (var i = 0; i < this.$store.state.productsInStore; i++) {
+    for (var i = 0; i < Items.length; i++) {
       let list = this.$store.state.products.filter(item => item.id == i);
       if (list.length > 0) {
         this.cart.push(list[0]);
