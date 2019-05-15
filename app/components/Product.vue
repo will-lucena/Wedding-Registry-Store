@@ -3,7 +3,7 @@
     <Image :src="product.image" class="product-image m-b-10 m-r-10"/>
     <StackLayout orientation="vertical" class="product-info">
       <Label :text="product.name" textWrap="true"/>
-      <Label :text="product.description" textWrap="true"/>
+      <Label :text="product.description" textWrap="true" />
       <Label :text="price" textWrap="true"/>
       <Label :text="quantityAvailable" textWrap="true"/>
       <Button v-if="isAvailable" text="Add to cart" class="button m-12" @tap="addToCart"/>
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 
 export default {
   data() {
